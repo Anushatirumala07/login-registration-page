@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login & Registration Expanded</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .container {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    width: 350px;
+    padding: 30px;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="password"]:focus {
+    border-color: #9b59b6;
+    outline: none;
+  }
+  .toggle-password {
+    cursor: pointer;
+    font-size: 0.85em;
+    color: #9b59b6;
+    margin-bottom: 15px;
+    user-select: none;
+    text-align: right;
+  }
+  button {
+    padding: 10px;
+    border: none;
+    background-color: #9b59b6;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #713d7a;
+  }
+  .switch-link {
+    text-align: center;
+    margin-top: 15px;
+    color: #9b59b6;
+    cursor: pointer;
+  }
+  .switch-link:hover {
+    text-decoration: underline;
+  }
+  .error-message {
+    color: red;
+    font-size: 0.85em;
+    margin-bottom: 10px;
+  }
+  .success-message {
+    color: green;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="login-form">
+  <h2>Login</h2>
+  <form id="loginForm" onsubmit="return validateLogin()">
+    <label for="login-email">Email</label>
+    <input type="email" id="login-email" placeholder="Enter your email" required />
+    <label for="login-password">Password</label>
+    <input type="password" id="login-password" placeholder="Enter your password" required />
+    <div class="toggle-password" onclick="togglePassword('login-password','toggleLogin')"
+         id="toggleLogin">Show Password</div>
+    <div id="login-error" class="error-message"></div>
+    <button type="submit">Login</button>
+  </form>
+  <div class="switch-link" onclick="showRegister()">Don't have an account? Register</div>
+</div>
+
+<div class="container" id="register-form" style="display:none;">
+  <h2>Register</h2>
+  <form id="registerForm" onsubmit="return validateRegister()">
+    <label for="reg-username">Username</label>
+    <input type="text" id="reg-username" placeholder="Choose a username" required />
+    <label for="reg-email">Email</label>
+    <input type="email" id="reg-email" placeholder="Enter your email" required />
+    <label for="reg-password">Password</label>
+    <input type="password" id="reg-password" placeholder="Create a password" required />
+    <label for="reg-confirmpassword">Confirm Password</label>
+    <input type="password" id="reg-confirmpassword" placeholder="Confirm your password" required />
+    <div class="toggle-password" onclick="togglePassword('reg-password','toggleRegPass')"
+         id="toggleRegPass">Show Password</div>
+    <div class="toggle-password" onclick="togglePassword('reg-confirmpassword','toggleRegConfirm')"
+         id="toggleRegConfirm">Show Confirm Password</div>
+    <div id="register-error" class="error-message"></div>
+    <div id="register-success" class="success-message"></div>
+    <button type="submit">Register</button>
+  </form>
+  <div class="switch-link" onclick="showLogin()">Already have an account? Login</div>
+</div>
+
+<script>
+  function showRegister() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+    clearMessages();
+  }
+  function showLogin() {
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+    clearMessages();
+  }
+
+  function togglePassword(fieldId, toggleId) {
+    const field = document.getElementById(fieldId);
+    const toggle = document.getElementById(toggleId);
+    if (field.type === "password") {
+      field.type = "text";
+      toggle.textContent = "Hide Password";
+    } else {
+      field.type = "password";
+      toggle.textContent = "Show Password";
+    }
+  }
+
+  function validateLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value.trim();
+    const errorDiv = document.getElementById('login-error');
+
+    if (!email || !password) {
+      errorDiv.textContent = "Both fields are required.";
+      return false;
+    }
+    errorDiv.textContent = "";
+    alert("Login successful (demo only)");
+    return false; // Remove this when connected to backend
+  }
+
+  function validateRegister() {
+    const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirmPassword = document.getElementById('reg-confirmpassword').value;
+    const errorDiv = document.getElementById('register-error');
+    const successDiv = document.getElementById('register-success');
+
+    errorDiv.textContent = "";
+    successDiv.textContent = "";
+
+    if (!username || !email || !password || !confirmPassword) {
+      errorDiv.textContent = "All fields are required.";
+      return false;
+    }
+
+    const emailPattern = /^[^ ]+@[^ ]+.[a-z]{2,3}$/;
+    if (!emailPattern.test(email)) {
+      errorDiv.textContent = "Please enter a valid email address.";
+      return false;
+    }
+
+    if (password.length < 6) {
+      errorDiv.textContent = "Password must be at least 6 characters.";
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      errorDiv.textContent = "Passwords do not match.";
+      return false;
+    }
+
+    successDiv.textContent = "Registration successful (demo only).";
+    return false; // Remove this when connected to backend
+  }
+
+  function clearMessages() {
+    document.getElementById('login-error').textContent = "";
+    document.getElementById('register-error').textContent = "";
+    document.getElementById('register-success').textContent = "";
+  }
+</script>
+
+</body>
+</html>
